@@ -44,7 +44,7 @@ public class Main extends PluginBase implements Listener {
         getServer().getPluginManager().registerEvents(this, this);
 
         if (config.getInt("update") > 0) {
-            getServer().getScheduler().scheduleDelayedRepeatingTask(this, new ScoreboardUpdater(this), config.getInt("update"), config.getInt("update"), true);
+            getServer().getScheduler().scheduleDelayedRepeatingTask(this, new ScoreboardUpdater(this), config.getInt("update"), config.getInt("update"));
         }
     }
 
