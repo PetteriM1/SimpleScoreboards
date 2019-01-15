@@ -54,7 +54,12 @@ public class Main extends PluginBase implements Listener {
         PlaceholderAPI api = PlaceholderAPIIml.getInstance();
 
         config.getStringList("text").forEach((text) -> {
-            scoreboardDisplay.addLine(api.translateString(text, p).replaceAll("§", "\u00A7"), line++);
+            String money = "null";
+            try {
+                Class.forName("me.onebone.economyapi.EconomyAPI");
+                money = Double.toString(me.onebone.economyapi.EconomyAPI.getInstance().myMoney(p));
+            } catch (Exception ex) {}
+            scoreboardDisplay.addLine(api.translateString(text, p).replaceAll("§", "\u00A7").replaceAll("%economy_money%", money), line++);
         });
 
         scoreboard.showFor(p);
