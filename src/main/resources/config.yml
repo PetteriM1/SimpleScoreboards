@@ -1,24 +1,14 @@
 # Config version, do not edit
-version: 1
+version: 2
 # How often scoreboard should be updated in ticks (20 ticks = 1 second)
-# 0 = disabled, enable if you use updating placeholders
+# 0 = disabled, enable if you use placeholders
 # With coordinates 10-20 recommended, with other placeholders 80-200
 update: 0
 # Scoreboard title
 title: "§eSimple§9Scoreboards"
 # Scoreboard lines
-# You can use § for colors
+# You can use § for colors and placeholders from PlaceholderAPI
 text:
   - "§dVersion §51.0"
   - "§aCreated by §3PetteriM1"
   - "§6Setup your scoreboard in config"
-# You can use next placeholders in scoreboard:
-# <NAME> Player's name
-# <WORLD> World name
-# <X> X coordinate
-# <Y> Y Coordinate
-# <Z> Z coordinate
-# <PLAYERS> Number of players online
-# <MAXPLAYERS> Max amount of players
-# <PING> Player's ping
-# <MONEY> Money amount from EconomyAPI
