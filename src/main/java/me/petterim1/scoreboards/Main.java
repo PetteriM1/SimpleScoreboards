@@ -59,7 +59,7 @@ public class Main extends PluginBase implements Listener {
                 Class.forName("me.onebone.economyapi.EconomyAPI");
                 money = Double.toString(me.onebone.economyapi.EconomyAPI.getInstance().myMoney(p));
             } catch (Exception ex) {}
-            scoreboardDisplay.addLine(api.translateString(text, p).replaceAll("§", "\u00A7").replaceAll("%economy_money%", money), line++);
+            scoreboardDisplay.addLine(api.translateString(text.replaceAll("%economy_money%", money), p).replaceAll("§", "\u00A7"), line++);
         });
 
         scoreboard.showFor(p);

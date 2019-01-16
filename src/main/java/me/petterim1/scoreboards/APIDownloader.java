@@ -26,6 +26,7 @@ public class APIDownloader {
             ReadableByteChannel rbc = Channels.newChannel(website.openStream());
             FileOutputStream fos = new FileOutputStream(scoreboardApi);
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+            fos.close();
         } catch (Exception e) {
             server.getLogger().logException(e);
             server.getPluginManager().disablePlugin(plugin);
@@ -48,6 +49,7 @@ public class APIDownloader {
             ReadableByteChannel rbc = Channels.newChannel(website.openStream());
             FileOutputStream fos = new FileOutputStream(placeholderApi);
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+            fos.close();
         } catch (Exception e) {
             server.getLogger().logException(e);
             server.getPluginManager().disablePlugin(plugin);
