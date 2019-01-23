@@ -33,12 +33,7 @@ public class ScoreboardUpdater extends Thread {
             PlaceholderAPI api = PlaceholderAPIIml.getInstance();
 
             Main.config.getStringList("text").forEach((text) -> {
-                String money = "null";
-                try {
-                    Class.forName("me.onebone.economyapi.EconomyAPI");
-                    money = Double.toString(me.onebone.economyapi.EconomyAPI.getInstance().myMoney(p));
-                } catch (Exception ex) {}
-                scoreboardDisplay.addLine(api.translateString(text.replaceAll("%economy_money%", money), p).replaceAll("§", "\u00A7"), line++);
+                scoreboardDisplay.addLine(api.translateString(text.replaceAll("%economy_money%", Main.getMoney(p)).replaceAll("%factions_name%", Main.getFaction(p)), p).replaceAll("§", "\u00A7"), line++);
             });
 
             scoreboard.showFor(p);

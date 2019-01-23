@@ -54,16 +54,29 @@ public class Main extends PluginBase implements Listener {
         PlaceholderAPI api = PlaceholderAPIIml.getInstance();
 
         config.getStringList("text").forEach((text) -> {
-            String money = "null";
-            try {
-                Class.forName("me.onebone.economyapi.EconomyAPI");
-                money = Double.toString(me.onebone.economyapi.EconomyAPI.getInstance().myMoney(p));
-            } catch (Exception ex) {}
-            scoreboardDisplay.addLine(api.translateString(text.replaceAll("%economy_money%", money), p).replaceAll("§", "\u00A7"), line++);
+            scoreboardDisplay.addLine(api.translateString(text.replaceAll("%economy_money%", getMoney(p)).replaceAll("%factions_name%", getFaction(p)), p).replaceAll("§", "\u00A7"), line++);
         });
 
         scoreboard.showFor(p);
         scoreboards.put(p, scoreboard);
         line = 0;
+    }
+
+    public static String getMoney(Player p) {
+        try {
+            Class.forName("me.onebone.economyapi.EconomyAPI");
+            return Double.toString(me.onebone.economyapi.EconomyAPI.getInstance().myMoney(p));
+        } catch (Exception ex) {
+            return "EconomyAPI not found";
+        }
+    }
+
+    public static String getFaction(Player p) {
+        try {
+			Class.forName("com.massivecraft.factions.P");
+			return com.massivecraft.factions.P.p.getPlayerFactionTag(p);
+		} catch (Exception e) {
+			return "Factions not found";
+		}
     }
 }
