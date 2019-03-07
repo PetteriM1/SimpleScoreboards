@@ -7,7 +7,6 @@ import cn.nukkit.event.player.PlayerJoinEvent;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 
-import com.creeperface.nukkit.placeholderapi.PlaceholderAPIIml;
 import com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI;
 
 import de.theamychan.scoreboard.api.ScoreboardAPI;
@@ -51,10 +50,9 @@ public class Main extends PluginBase implements Listener {
         Player p = e.getPlayer();
         Scoreboard scoreboard  = ScoreboardAPI.createScoreboard();
         ScoreboardDisplay scoreboardDisplay = scoreboard.addDisplay(DisplaySlot.SIDEBAR, "dumy", config.getString("title"));
-        PlaceholderAPI api = PlaceholderAPIIml.getInstance();
 
         config.getStringList("text").forEach((text) -> {
-            scoreboardDisplay.addLine(api.translateString(text.replaceAll("%economy_money%", getMoney(p)).replaceAll("%factions_name%", getFaction(p)), p).replaceAll("§", "\u00A7"), line++);
+            scoreboardDisplay.addLine(PlaceholderAPI.getInstance().translateString(text.replaceAll("%economy_money%", getMoney(p)).replaceAll("%factions_name%", getFaction(p)), p).replaceAll("§", "\u00A7"), line++);
         });
 
         scoreboard.showFor(p);
@@ -73,10 +71,10 @@ public class Main extends PluginBase implements Listener {
 
     public static String getFaction(Player p) {
         try {
-			Class.forName("com.massivecraft.factions.P");
-			return com.massivecraft.factions.P.p.getPlayerFactionTag(p);
-		} catch (Exception e) {
-			return "Factions not found";
-		}
+            Class.forName("com.massivecraft.factions.P");
+            return com.massivecraft.factions.P.p.getPlayerFactionTag(p);
+        } catch (Exception e) {
+            return "Factions not found";
+        }
     }
 }

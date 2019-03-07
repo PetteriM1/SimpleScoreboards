@@ -2,7 +2,6 @@ package me.petterim1.scoreboards;
 
 import cn.nukkit.Player;
 
-import com.creeperface.nukkit.placeholderapi.PlaceholderAPIIml;
 import com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI;
 
 import de.theamychan.scoreboard.api.ScoreboardAPI;
@@ -30,10 +29,9 @@ public class ScoreboardUpdater extends Thread {
 
             Scoreboard scoreboard = ScoreboardAPI.createScoreboard();
             ScoreboardDisplay scoreboardDisplay = scoreboard.addDisplay(DisplaySlot.SIDEBAR, "dumy", Main.config.getString("title"));
-            PlaceholderAPI api = PlaceholderAPIIml.getInstance();
 
             Main.config.getStringList("text").forEach((text) -> {
-                scoreboardDisplay.addLine(api.translateString(text.replaceAll("%economy_money%", Main.getMoney(p)).replaceAll("%factions_name%", Main.getFaction(p)), p).replaceAll("§", "\u00A7"), line++);
+                scoreboardDisplay.addLine(PlaceholderAPI.getInstance().translateString(text.replaceAll("%economy_money%", Main.getMoney(p)).replaceAll("%factions_name%", Main.getFaction(p)), p).replaceAll("§", "\u00A7"), line++);
             });
 
             scoreboard.showFor(p);

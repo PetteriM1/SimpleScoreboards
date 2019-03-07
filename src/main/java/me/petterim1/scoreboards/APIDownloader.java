@@ -6,26 +6,21 @@ import cn.nukkit.plugin.Plugin;
 import java.io.FileOutputStream;
 import java.net.URL;
 import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 
 public class APIDownloader {
 
     public static void checkAndRun(Plugin plugin) {
         Server server = plugin.getServer();
 
-        if (server.getPluginManager().getPlugin("ScoreboardPlugin") != null) {
-            return;
-        }
+        if (server.getPluginManager().getPlugin("ScoreboardPlugin") != null) return;
 
         plugin.getLogger().info("Downloading ScoreboardAPI...");
 
         String scoreboardApi = server.getFilePath() + "/plugins/ScoreboardAPI.jar";
 
         try {
-            URL website = new URL("https://sites.google.com/site/downloadcenterpetterim1/ScoreboardAPI.jar");
-            ReadableByteChannel rbc = Channels.newChannel(website.openStream());
             FileOutputStream fos = new FileOutputStream(scoreboardApi);
-            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+            fos.getChannel().transferFrom(Channels.newChannel(new URL("https://sites.google.com/site/downloadcenterpetterim1/ScoreboardAPI.jar").openStream()), 0, Long.MAX_VALUE);
             fos.close();
         } catch (Exception e) {
             server.getLogger().logException(e);
@@ -36,19 +31,15 @@ public class APIDownloader {
         plugin.getLogger().info("ScoreboardAPI downloaded successfully");
         server.getPluginManager().loadPlugin(scoreboardApi);
 
-        if (server.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            return;
-        }
+        if (server.getPluginManager().getPlugin("PlaceholderAPI") != null) return;
 
         plugin.getLogger().info("Downloading PlaceholderAPI...");
 
         String placeholderApi = server.getFilePath() + "/plugins/PlaceholderAPI.jar";
 
         try {
-            URL website = new URL("https://sites.google.com/site/downloadcenterpetterim1/PlaceholderAPI.jar");
-            ReadableByteChannel rbc = Channels.newChannel(website.openStream());
             FileOutputStream fos = new FileOutputStream(placeholderApi);
-            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+            fos.getChannel().transferFrom(Channels.newChannel(new URL("https://sites.google.com/site/downloadcenterpetterim1/PlaceholderAPI.jar").openStream()), 0, Long.MAX_VALUE);
             fos.close();
         } catch (Exception e) {
             server.getLogger().logException(e);
