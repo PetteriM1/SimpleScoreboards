@@ -1,14 +1,17 @@
 # Config version, do not edit
 version: 2
 # How often scoreboard should be updated in ticks (20 ticks = 1 second)
-# 0 = disabled, enable if you use placeholders
+# 0 = disabled, ENABLE THIS IF YOU USE PLACEHOLDERS
 # With coordinates 10-20 recommended, with other placeholders 80-200
 update: 0
+# Use async task to update scoreboard
+# Less server load but may lead to errors
+async: true
 # Scoreboard title
 title: "§eSimple§9Scoreboards"
 # Scoreboard lines
 # You can use § for colors and placeholders from PlaceholderAPI
 text:
-  - "§dVersion §52.2.1"
+  - "§dVersion §52.3.0"
   - "§aCreated by §3PetteriM1"
   - "§6Setup your scoreboard in config"

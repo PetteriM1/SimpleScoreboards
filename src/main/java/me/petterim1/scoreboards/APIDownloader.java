@@ -9,7 +9,7 @@ import java.nio.channels.Channels;
 
 public class APIDownloader {
 
-    public static void checkAndRun(Plugin plugin) {
+    static void checkAndRun(Plugin plugin) {
         Server server = plugin.getServer();
 
         if (server.getPluginManager().getPlugin("ScoreboardPlugin") != null) return;

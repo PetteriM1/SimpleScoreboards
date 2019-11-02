@@ -15,28 +15,42 @@ public class ScoreboardUpdater extends Thread {
 
     private int line = 0;
 
-    public ScoreboardUpdater(Main plugin) {
+    ScoreboardUpdater(Main plugin) {
         this.plugin = plugin;
         setName("ScoreboardUpdater");
     }
 
     @Override
     public void run() {
-        for (Player p : plugin.getServer().getOnlinePlayers().values()) {
-            try {
-                Main.scoreboards.get(p).hideFor(p);
-            } catch (Exception e) {}
+        try {
+            for (Player p : plugin.getServer().getOnlinePlayers().values()) {
+                try {
+                    Main.scoreboards.get(p).hideFor(p);
+                } catch (Exception ignored) {}
 
-            Scoreboard scoreboard = ScoreboardAPI.createScoreboard();
-            ScoreboardDisplay scoreboardDisplay = scoreboard.addDisplay(DisplaySlot.SIDEBAR, "dumy", Main.config.getString("title"));
+                Scoreboard scoreboard = ScoreboardAPI.createScoreboard();
+                ScoreboardDisplay scoreboardDisplay = scoreboard.addDisplay(DisplaySlot.SIDEBAR, "dumy", Main.config.getString("title"));
 
-            Main.config.getStringList("text").forEach((text) -> {
-                scoreboardDisplay.addLine(PlaceholderAPI.getInstance().translateString(text.replaceAll("%economy_money%", Main.getMoney(p)).replaceAll("%factions_name%", Main.getFaction(p)), p).replaceAll("§", "\u00A7"), line++);
-            });
+                Main.config.getStringList("text").forEach((text) -> {
+                    scoreboardDisplay.addLine(PlaceholderAPI.getInstance().translateString(text
+                                    .replace("%economy_money%", Main.getMoney(p))
+                                    .replace("%factions_name%", Main.getFaction(p))
+                                    .replace("%kdr_kdr%", String.valueOf(kdr.Main.plugin.getKDR(p)))
+                                    .replace("%kdr_kills%", String.valueOf(kdr.Main.plugin.getKills(p)))
+                                    .replace("%kdr_deaths%", String.valueOf(kdr.Main.plugin.getDeaths(p)))
+                                    .replace("%kdr_topkdr%", String.valueOf(kdr.Main.plugin.getTopKDRScore()))
+                                    .replace("%kdr_topkdrplayer%", kdr.Main.plugin.getTopKDRPlayer())
+                                    .replace("%kdr_topkills%", String.valueOf(kdr.Main.plugin.getTopKills()))
+                                    .replace("%kdr_topdeaths%", String.valueOf(kdr.Main.plugin.getTopDeaths()))
+                                    .replace("%kdr_topkillsplayer%", kdr.Main.plugin.getTopKillsPlayer())
+                                    .replace("%kdr_topdeathsplayer%", kdr.Main.plugin.getTopDeathsPlayer())
+                            , p), line++);
+                });
 
-            scoreboard.showFor(p);
-            Main.scoreboards.put(p, scoreboard);
-            line = 0;
-        }
+                scoreboard.showFor(p);
+                Main.scoreboards.put(p, scoreboard);
+                line = 0;
+            }
+        } catch (Exception ignored) {}
     }
 }

@@ -21,11 +21,11 @@ public class Main extends PluginBase implements Listener {
 
     private static final int currentConfig = 2;
 
-    public static Config config;
+    static Config config;
 
     private int line = 0;
 
-    public static Map<Player, Scoreboard> scoreboards = new HashMap<>();
+    static Map<Player, Scoreboard> scoreboards = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -41,7 +41,17 @@ public class Main extends PluginBase implements Listener {
         getServer().getPluginManager().registerEvents(this, this);
 
         if (config.getInt("update") > 0) {
-            getServer().getScheduler().scheduleDelayedRepeatingTask(this, new ScoreboardUpdater(this), config.getInt("update"), config.getInt("update"));
+            getServer().getScheduler().scheduleDelayedRepeatingTask(this, new ScoreboardUpdater(this), config.getInt("update"), config.getInt("update"), config.getBoolean("async", true));
+        }
+
+        try {
+            Class.forName("kdr.Main");
+        } catch (Exception e) {
+            config.getStringList("text").forEach((text) -> {
+                if (text.contains("%kdr_")) {
+                    getLogger().warning("Scoreboard has KDR placeholders but KDR plugin not found. This may lead to errors.");
+                }
+            });
         }
     }
 
@@ -52,7 +62,19 @@ public class Main extends PluginBase implements Listener {
         ScoreboardDisplay scoreboardDisplay = scoreboard.addDisplay(DisplaySlot.SIDEBAR, "dumy", config.getString("title"));
 
         config.getStringList("text").forEach((text) -> {
-            scoreboardDisplay.addLine(PlaceholderAPI.getInstance().translateString(text.replaceAll("%economy_money%", getMoney(p)).replaceAll("%factions_name%", getFaction(p)), p).replaceAll("§", "\u00A7"), line++);
+            scoreboardDisplay.addLine(PlaceholderAPI.getInstance().translateString(text
+                            .replace("%economy_money%", getMoney(p))
+                            .replace("%factions_name%", getFaction(p))
+                            .replace("%kdr_kdr%", String.valueOf(kdr.Main.plugin.getKDR(p)))
+                            .replace("%kdr_kills%", String.valueOf(kdr.Main.plugin.getKills(p)))
+                            .replace("%kdr_deaths%", String.valueOf(kdr.Main.plugin.getDeaths(p)))
+                            .replace("%kdr_topkdr%", String.valueOf(kdr.Main.plugin.getTopKDRScore()))
+                            .replace("%kdr_topkdrplayer%", kdr.Main.plugin.getTopKDRPlayer())
+                            .replace("%kdr_topkills%", String.valueOf(kdr.Main.plugin.getTopKills()))
+                            .replace("%kdr_topdeaths%", String.valueOf(kdr.Main.plugin.getTopDeaths()))
+                            .replace("%kdr_topkillsplayer%", kdr.Main.plugin.getTopKillsPlayer())
+                            .replace("%kdr_topdeathsplayer%", kdr.Main.plugin.getTopDeathsPlayer())
+                    , p), line++);
         });
 
         scoreboard.showFor(p);
@@ -60,7 +82,7 @@ public class Main extends PluginBase implements Listener {
         line = 0;
     }
 
-    public static String getMoney(Player p) {
+    static String getMoney(Player p) {
         try {
             Class.forName("me.onebone.economyapi.EconomyAPI");
             return Double.toString(me.onebone.economyapi.EconomyAPI.getInstance().myMoney(p));
@@ -69,7 +91,7 @@ public class Main extends PluginBase implements Listener {
         }
     }
 
-    public static String getFaction(Player p) {
+    static String getFaction(Player p) {
         try {
             Class.forName("com.massivecraft.factions.P");
             return com.massivecraft.factions.P.p.getPlayerFactionTag(p);
