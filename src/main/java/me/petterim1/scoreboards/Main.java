@@ -71,7 +71,7 @@ public class Main extends PluginBase implements Listener {
     }
     
     static String getScoreboardString(Player p, String text) {
-		return PlaceholderAPI.getInstance().translateString(text
+		return PlaceholderAPI.getInstance().translateString(getKDRStats(p, text)
                     .replace("%economy_money%", getMoney(p))
                     .replace("%factions_name%", getFaction(p)), p);
     }
@@ -98,7 +98,7 @@ public class Main extends PluginBase implements Listener {
         try {
             Class.forName("kdr.Main");
 			
-			return textToReplace.replace("%kdr_kdr%", String.valueOf(kdr.Main.plugin.getKDR(p)))
+            return textToReplace.replace("%kdr_kdr%", String.valueOf(kdr.Main.plugin.getKDR(p)))
                     .replace("%kdr_kills%", String.valueOf(kdr.Main.plugin.getKills(p)))
                     .replace("%kdr_deaths%", String.valueOf(kdr.Main.plugin.getDeaths(p)))
                     .replace("%kdr_topkdr%", String.valueOf(kdr.Main.plugin.getTopKDRScore()))
