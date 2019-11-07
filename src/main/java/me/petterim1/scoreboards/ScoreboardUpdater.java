@@ -32,7 +32,7 @@ public class ScoreboardUpdater extends Thread {
                 ScoreboardDisplay scoreboardDisplay = scoreboard.addDisplay(DisplaySlot.SIDEBAR, "dumy", Main.config.getString("title"));
 
                 Main.config.getStringList("text").forEach((text) -> {
-                    scoreboardDisplay.addLine(Main.getScoreboardString(text), line++);
+                    scoreboardDisplay.addLine(Main.getScoreboardString(p, text), line++);
                 });
 
                 scoreboard.showFor(p);
