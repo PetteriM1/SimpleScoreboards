@@ -32,19 +32,7 @@ public class ScoreboardUpdater extends Thread {
                 ScoreboardDisplay scoreboardDisplay = scoreboard.addDisplay(DisplaySlot.SIDEBAR, "dumy", Main.config.getString("title"));
 
                 Main.config.getStringList("text").forEach((text) -> {
-                    scoreboardDisplay.addLine(PlaceholderAPI.getInstance().translateString(text
-                                    .replace("%economy_money%", Main.getMoney(p))
-                                    .replace("%factions_name%", Main.getFaction(p))
-                                    .replace("%kdr_kdr%", String.valueOf(kdr.Main.plugin.getKDR(p)))
-                                    .replace("%kdr_kills%", String.valueOf(kdr.Main.plugin.getKills(p)))
-                                    .replace("%kdr_deaths%", String.valueOf(kdr.Main.plugin.getDeaths(p)))
-                                    .replace("%kdr_topkdr%", String.valueOf(kdr.Main.plugin.getTopKDRScore()))
-                                    .replace("%kdr_topkdrplayer%", kdr.Main.plugin.getTopKDRPlayer())
-                                    .replace("%kdr_topkills%", String.valueOf(kdr.Main.plugin.getTopKills()))
-                                    .replace("%kdr_topdeaths%", String.valueOf(kdr.Main.plugin.getTopDeaths()))
-                                    .replace("%kdr_topkillsplayer%", kdr.Main.plugin.getTopKillsPlayer())
-                                    .replace("%kdr_topdeathsplayer%", kdr.Main.plugin.getTopDeathsPlayer())
-                            , p), line++);
+                    scoreboardDisplay.addLine(Main.getScoreboardString(text), line++);
                 });
 
                 scoreboard.showFor(p);
