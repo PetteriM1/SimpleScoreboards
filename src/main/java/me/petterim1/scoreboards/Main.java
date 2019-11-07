@@ -71,7 +71,7 @@ public class Main extends PluginBase implements Listener {
     }
     
     static String getScoreboardString(Player p, String text) {
-		return PlaceholderAPI.getInstance().translateString(getKDRStats(p, text)
+        return PlaceholderAPI.getInstance().translateString(getKDRStats(p, text)
                     .replace("%economy_money%", getMoney(p))
                     .replace("%factions_name%", getFaction(p)), p);
     }
@@ -108,7 +108,7 @@ public class Main extends PluginBase implements Listener {
                     .replace("%kdr_topkillsplayer%", kdr.Main.plugin.getTopKillsPlayer())
                     .replace("%kdr_topdeathsplayer%", kdr.Main.plugin.getTopDeathsPlayer());
         } catch (Exception e) {
-			String errorMessage = "KDR plugin not found";
+            String errorMessage = "KDR plugin not found";
 			
             return textToReplace.replace("%kdr_kdr%", errorMessage)
                     .replace("%kdr_kills%", errorMessage)
