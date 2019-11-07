@@ -83,7 +83,7 @@ public class Main extends PluginBase implements Listener {
                     .replace("%kdr_topdeaths%", String.valueOf(getKDRPlugin().getTopDeaths()))
                     .replace("%kdr_topkillsplayer%", getKDRPlugin().getTopKillsPlayer())
                     .replace("%kdr_topdeathsplayer%", getKDRPlugin().getTopDeathsPlayer())
-                , p)
+                , p);
     }
 
     static String getMoney(Player p) {
