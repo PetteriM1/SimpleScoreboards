@@ -27,6 +27,8 @@ public class Main extends PluginBase implements Listener {
 
     static Map<Player, Scoreboard> scoreboards = new HashMap<>();
 
+    private static final String errorMessageNoKDR = "KDR plugin not found";
+
     @Override
     public void onEnable() {
         saveDefaultConfig();
@@ -42,16 +44,8 @@ public class Main extends PluginBase implements Listener {
 
         if (config.getInt("update") > 0) {
             getServer().getScheduler().scheduleDelayedRepeatingTask(this, new ScoreboardUpdater(this), config.getInt("update"), config.getInt("update"), config.getBoolean("async", true));
-        }
-
-        try {
-            Class.forName("kdr.Main");
-        } catch (Exception e) {
-            config.getStringList("text").forEach((text) -> {
-                if (text.contains("%kdr_")) {
-                    getLogger().warning("Scoreboard has KDR placeholders but KDR plugin not found. This may lead to errors.");
-                }
-            });
+        } else {
+            getLogger().notice("Scoreboard updating is not enabled");
         }
     }
 
@@ -76,7 +70,7 @@ public class Main extends PluginBase implements Listener {
                     .replace("%factions_name%", getFaction(p)), p);
     }
 
-    static String getMoney(Player p) {
+    private static String getMoney(Player p) {
         try {
             Class.forName("me.onebone.economyapi.EconomyAPI");
             return Double.toString(me.onebone.economyapi.EconomyAPI.getInstance().myMoney(p));
@@ -85,7 +79,7 @@ public class Main extends PluginBase implements Listener {
         }
     }
 
-    static String getFaction(Player p) {
+    private static String getFaction(Player p) {
         try {
             Class.forName("com.massivecraft.factions.P");
             return com.massivecraft.factions.P.p.getPlayerFactionTag(p);
@@ -94,7 +88,7 @@ public class Main extends PluginBase implements Listener {
         }
     }
     
-    static String getKDRStats(Player p, String textToReplace) {
+    private static String getKDRStats(Player p, String textToReplace) {
         try {
             Class.forName("kdr.Main");
 			
@@ -108,17 +102,15 @@ public class Main extends PluginBase implements Listener {
                     .replace("%kdr_topkillsplayer%", kdr.Main.plugin.getTopKillsPlayer())
                     .replace("%kdr_topdeathsplayer%", kdr.Main.plugin.getTopDeathsPlayer());
         } catch (Exception e) {
-            String errorMessage = "KDR plugin not found";
-			
-            return textToReplace.replace("%kdr_kdr%", errorMessage)
-                    .replace("%kdr_kills%", errorMessage)
-                    .replace("%kdr_deaths%", errorMessage)
-                    .replace("%kdr_topkdr%", errorMessage)
-                    .replace("%kdr_topkdrplayer%", errorMessage)
-                    .replace("%kdr_topkills%", errorMessage)
-                    .replace("%kdr_topdeaths%", errorMessage)
-                    .replace("%kdr_topkillsplayer%", errorMessage)
-                    .replace("%kdr_topdeathsplayer%", errorMessage);
+            return textToReplace.replace("%kdr_kdr%", errorMessageNoKDR)
+                    .replace("%kdr_kills%", errorMessageNoKDR)
+                    .replace("%kdr_deaths%", errorMessageNoKDR)
+                    .replace("%kdr_topkdr%", errorMessageNoKDR)
+                    .replace("%kdr_topkdrplayer%", errorMessageNoKDR)
+                    .replace("%kdr_topkills%", errorMessageNoKDR)
+                    .replace("%kdr_topdeaths%", errorMessageNoKDR)
+                    .replace("%kdr_topkillsplayer%", errorMessageNoKDR)
+                    .replace("%kdr_topdeathsplayer%", errorMessageNoKDR);
         }
     }
 }
