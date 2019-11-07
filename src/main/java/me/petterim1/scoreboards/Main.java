@@ -62,24 +62,18 @@ public class Main extends PluginBase implements Listener {
         ScoreboardDisplay scoreboardDisplay = scoreboard.addDisplay(DisplaySlot.SIDEBAR, "dumy", config.getString("title"));
 
         config.getStringList("text").forEach((text) -> {
-            scoreboardDisplay.addLine(PlaceholderAPI.getInstance().translateString(text
-                            .replace("%economy_money%", getMoney(p))
-                            .replace("%factions_name%", getFaction(p))
-                            .replace("%kdr_kdr%", String.valueOf(kdr.Main.plugin.getKDR(p)))
-                            .replace("%kdr_kills%", String.valueOf(kdr.Main.plugin.getKills(p)))
-                            .replace("%kdr_deaths%", String.valueOf(kdr.Main.plugin.getDeaths(p)))
-                            .replace("%kdr_topkdr%", String.valueOf(kdr.Main.plugin.getTopKDRScore()))
-                            .replace("%kdr_topkdrplayer%", kdr.Main.plugin.getTopKDRPlayer())
-                            .replace("%kdr_topkills%", String.valueOf(kdr.Main.plugin.getTopKills()))
-                            .replace("%kdr_topdeaths%", String.valueOf(kdr.Main.plugin.getTopDeaths()))
-                            .replace("%kdr_topkillsplayer%", kdr.Main.plugin.getTopKillsPlayer())
-                            .replace("%kdr_topdeathsplayer%", kdr.Main.plugin.getTopDeathsPlayer())
-                    , p), line++);
+            scoreboardDisplay.addLine(getScoreboardString(p, text), line++);
         });
 
         scoreboard.showFor(p);
         scoreboards.put(p, scoreboard);
         line = 0;
+    }
+    
+    static String getScoreboardString(Player p, String text) {
+        return PlaceholderAPI.getInstance().translateString(getKDRStats(p, text)
+                    .replace("%economy_money%", getMoney(p))
+                    .replace("%factions_name%", getFaction(p)), p);
     }
 
     static String getMoney(Player p) {
@@ -87,7 +81,7 @@ public class Main extends PluginBase implements Listener {
             Class.forName("me.onebone.economyapi.EconomyAPI");
             return Double.toString(me.onebone.economyapi.EconomyAPI.getInstance().myMoney(p));
         } catch (Exception ex) {
-            return "EconomyAPI not found";
+            return "EconomyAPI plugin not found";
         }
     }
 
@@ -96,7 +90,35 @@ public class Main extends PluginBase implements Listener {
             Class.forName("com.massivecraft.factions.P");
             return com.massivecraft.factions.P.p.getPlayerFactionTag(p);
         } catch (Exception e) {
-            return "Factions not found";
+            return "Factions plugin not found";
+        }
+    }
+    
+    static String getKDRStats(Player p, String textToReplace) {
+        try {
+            Class.forName("kdr.Main");
+			
+            return textToReplace.replace("%kdr_kdr%", String.valueOf(kdr.Main.plugin.getKDR(p)))
+                    .replace("%kdr_kills%", String.valueOf(kdr.Main.plugin.getKills(p)))
+                    .replace("%kdr_deaths%", String.valueOf(kdr.Main.plugin.getDeaths(p)))
+                    .replace("%kdr_topkdr%", String.valueOf(kdr.Main.plugin.getTopKDRScore()))
+                    .replace("%kdr_topkdrplayer%", kdr.Main.plugin.getTopKDRPlayer())
+                    .replace("%kdr_topkills%", String.valueOf(kdr.Main.plugin.getTopKills()))
+                    .replace("%kdr_topdeaths%", String.valueOf(kdr.Main.plugin.getTopDeaths()))
+                    .replace("%kdr_topkillsplayer%", kdr.Main.plugin.getTopKillsPlayer())
+                    .replace("%kdr_topdeathsplayer%", kdr.Main.plugin.getTopDeathsPlayer());
+        } catch (Exception e) {
+            String errorMessage = "KDR plugin not found";
+			
+            return textToReplace.replace("%kdr_kdr%", errorMessage)
+                    .replace("%kdr_kills%", errorMessage)
+                    .replace("%kdr_deaths%", errorMessage)
+                    .replace("%kdr_topkdr%", errorMessage)
+                    .replace("%kdr_topkdrplayer%", errorMessage)
+                    .replace("%kdr_topkills%", errorMessage)
+                    .replace("%kdr_topdeaths%", errorMessage)
+                    .replace("%kdr_topkillsplayer%", errorMessage)
+                    .replace("%kdr_topdeathsplayer%", errorMessage);
         }
     }
 }
