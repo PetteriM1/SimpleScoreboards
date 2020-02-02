@@ -4,6 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.player.PlayerJoinEvent;
+import cn.nukkit.event.player.PlayerQuitEvent;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 
@@ -51,17 +52,24 @@ public class Main extends PluginBase implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
-        Player p = e.getPlayer();
-        Scoreboard scoreboard  = ScoreboardAPI.createScoreboard();
-        ScoreboardDisplay scoreboardDisplay = scoreboard.addDisplay(DisplaySlot.SIDEBAR, "dumy", config.getString("title"));
+        if (config.getInt("update") < 1) {
+            Player p = e.getPlayer();
+            Scoreboard scoreboard = ScoreboardAPI.createScoreboard();
+            ScoreboardDisplay scoreboardDisplay = scoreboard.addDisplay(DisplaySlot.SIDEBAR, "dumy", config.getString("title"));
 
-        config.getStringList("text").forEach((text) -> {
-            scoreboardDisplay.addLine(getScoreboardString(p, text), line++);
-        });
+            config.getStringList("text").forEach((text) -> {
+                scoreboardDisplay.addLine(getScoreboardString(p, text), line++);
+            });
 
-        scoreboard.showFor(p);
-        scoreboards.put(p, scoreboard);
-        line = 0;
+            scoreboard.showFor(p);
+            scoreboards.put(p, scoreboard);
+            line = 0;
+        }
+    }
+
+    @EventHandler
+    private void onQuit(PlayerQuitEvent e) {
+        Main.scoreboards.remove(e.getPlayer());
     }
     
     static String getScoreboardString(Player p, String text) {
