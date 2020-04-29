@@ -69,7 +69,7 @@ public class Main extends PluginBase implements Listener {
 
     @EventHandler
     private void onQuit(PlayerQuitEvent e) {
-        Main.scoreboards.remove(e.getPlayer());
+        scoreboards.remove(e.getPlayer());
     }
     
     static String getScoreboardString(Player p, String text) {
@@ -81,7 +81,7 @@ public class Main extends PluginBase implements Listener {
     private static String getMoney(Player p) {
         try {
             Class.forName("me.onebone.economyapi.EconomyAPI");
-            return Double.toString(me.onebone.economyapi.EconomyAPI.getInstance().myMoney(p));
+            return String.format("%.2f", me.onebone.economyapi.EconomyAPI.getInstance().myMoney(p));
         } catch (Exception ex) {
             return "EconomyAPI plugin not found";
         }
