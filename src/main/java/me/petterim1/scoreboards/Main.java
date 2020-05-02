@@ -100,10 +100,10 @@ public class Main extends PluginBase implements Listener {
         try {
             Class.forName("kdr.Main");
 			
-            return textToReplace.replace("%kdr_kdr%", String.valueOf(kdr.Main.plugin.getKDR(p)))
+            return textToReplace.replace("%kdr_kdr%", String.format("%.2f", kdr.Main.plugin.getKDR(p)))
                     .replace("%kdr_kills%", String.valueOf(kdr.Main.plugin.getKills(p)))
                     .replace("%kdr_deaths%", String.valueOf(kdr.Main.plugin.getDeaths(p)))
-                    .replace("%kdr_topkdr%", String.valueOf(kdr.Main.plugin.getTopKDRScore()))
+                    .replace("%kdr_topkdr%", String.format("%.2f", kdr.Main.plugin.getTopKDRScore()))
                     .replace("%kdr_topkdrplayer%", kdr.Main.plugin.getTopKDRPlayer())
                     .replace("%kdr_topkills%", String.valueOf(kdr.Main.plugin.getTopKills()))
                     .replace("%kdr_topdeaths%", String.valueOf(kdr.Main.plugin.getTopDeaths()))
