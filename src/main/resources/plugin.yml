@@ -1,6 +1,6 @@
 name: SimpleScoreboards
 version: "${pom.version}"
-api: ["1.0.0"]
+api: ["1.0.11"]
 author: PetteriM1
 main: me.petterim1.scoreboards.Main
 

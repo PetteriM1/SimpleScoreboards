@@ -7,11 +7,14 @@ import de.theamychan.scoreboard.network.DisplaySlot;
 import de.theamychan.scoreboard.network.Scoreboard;
 import de.theamychan.scoreboard.network.ScoreboardDisplay;
 
+import java.util.Map;
+import java.util.UUID;
+
 public class ScoreboardUpdater extends Thread {
 
     private Main plugin;
 
-    private int line = 0;
+    private int line;
 
     ScoreboardUpdater(Main plugin) {
         this.plugin = plugin;
@@ -21,8 +24,12 @@ public class ScoreboardUpdater extends Thread {
     @Override
     public void run() {
         try {
-            if (!plugin.getServer().getOnlinePlayers().isEmpty()) {
-                for (Player p : plugin.getServer().getOnlinePlayers().values()) {
+            Map<UUID, Player> players = plugin.getServer().getOnlinePlayers();
+            if (!players.isEmpty()) {
+                for (Player p : players.values()) {
+                    if (!p.spawned || Main.noScoreboardWorlds.contains(p.getLevel().getName())) {
+                        continue;
+                    }
 
                     Scoreboard scoreboard = ScoreboardAPI.createScoreboard();
                     ScoreboardDisplay scoreboardDisplay = scoreboard.addDisplay(DisplaySlot.SIDEBAR, "dumy", Main.config.getString("title"));

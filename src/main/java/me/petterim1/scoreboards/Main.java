@@ -3,7 +3,7 @@ package me.petterim1.scoreboards;
 import cn.nukkit.Player;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
-import cn.nukkit.event.player.PlayerJoinEvent;
+import cn.nukkit.event.player.PlayerLocallyInitializedEvent;
 import cn.nukkit.event.player.PlayerQuitEvent;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
@@ -16,17 +16,20 @@ import de.theamychan.scoreboard.network.Scoreboard;
 import de.theamychan.scoreboard.network.ScoreboardDisplay;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Main extends PluginBase implements Listener {
 
-    private static final int currentConfig = 2;
+    private static final int currentConfig = 3;
 
     static Config config;
 
-    private int line = 0;
+    private int line;
 
     static Map<Player, Scoreboard> scoreboards = new HashMap<>();
+
+    static List<String> noScoreboardWorlds;
 
     private static final String errorMessageNoKDR = "KDR plugin not found";
 
@@ -38,6 +41,8 @@ public class Main extends PluginBase implements Listener {
         if (config.getInt("version") < currentConfig) {
             getServer().getLogger().warning("The config file of SimpleScoreboards plugin is outdated. Please delete the old config.yml file.");
         }
+
+        noScoreboardWorlds = config.getStringList("noScoreboardWorlds");
 
         APIDownloader.checkAndRun(this);
 
@@ -51,16 +56,12 @@ public class Main extends PluginBase implements Listener {
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent e) {
-        if (config.getInt("update") < 1) {
-            Player p = e.getPlayer();
+    public void onJoin(PlayerLocallyInitializedEvent e) {
+        Player p = e.getPlayer();
+        if (!noScoreboardWorlds.contains(p.getLevel().getName())) {
             Scoreboard scoreboard = ScoreboardAPI.createScoreboard();
             ScoreboardDisplay scoreboardDisplay = scoreboard.addDisplay(DisplaySlot.SIDEBAR, "dumy", config.getString("title"));
-
-            config.getStringList("text").forEach((text) -> {
-                scoreboardDisplay.addLine(getScoreboardString(p, text), line++);
-            });
-
+            config.getStringList("text").forEach((text) -> scoreboardDisplay.addLine(getScoreboardString(p, text), line++));
             scoreboard.showFor(p);
             scoreboards.put(p, scoreboard);
             line = 0;
