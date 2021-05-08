@@ -1,19 +1,13 @@
 package me.petterim1.scoreboards;
 
 import cn.nukkit.Player;
-import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
-import cn.nukkit.event.player.PlayerLocallyInitializedEvent;
-import cn.nukkit.event.player.PlayerQuitEvent;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 
 import com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI;
 
-import de.theamychan.scoreboard.api.ScoreboardAPI;
-import de.theamychan.scoreboard.network.DisplaySlot;
 import de.theamychan.scoreboard.network.Scoreboard;
-import de.theamychan.scoreboard.network.ScoreboardDisplay;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,80 +17,57 @@ public class Main extends PluginBase implements Listener {
 
     private static final int currentConfig = 3;
 
-    static Config config;
+    private static Class<?> placeholderAPI;
 
-    private int line;
-
-    static Map<Player, Scoreboard> scoreboards = new HashMap<>();
-
+    static String scoreboardTitle;
+    static List<String>  scoreboardText;
     static List<String> noScoreboardWorlds;
 
-    private static final String errorMessageNoKDR = "KDR plugin not found";
+    static final Map<Player, Scoreboard> scoreboards = new HashMap<>();
+
+    private static final String errorMessageNoKDR = "KDR plugin not found!";
 
     @Override
     public void onEnable() {
+        APIDownloader.checkAndRun(this);
+
+        try {
+            placeholderAPI = Class.forName("com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI");
+        } catch (Exception e) {
+            getLogger().critical("Error with PlaceholderAPI" , e);
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
         saveDefaultConfig();
-        config = getConfig();
+        Config config = getConfig();
 
         if (config.getInt("version") < currentConfig) {
             getServer().getLogger().warning("The config file of SimpleScoreboards plugin is outdated. Please delete the old config.yml file.");
         }
 
+        scoreboardTitle = config.getString("title");
+        scoreboardText = config.getStringList("text");
         noScoreboardWorlds = config.getStringList("noScoreboardWorlds");
 
-        APIDownloader.checkAndRun(this);
-
-        getServer().getPluginManager().registerEvents(this, this);
+        getServer().getPluginManager().registerEvents(new Listeners(), this);
 
         if (config.getInt("update") > 0) {
-            getServer().getScheduler().scheduleDelayedRepeatingTask(this, new ScoreboardUpdater(this), config.getInt("update"), config.getInt("update"), config.getBoolean("async", true));
+            getServer().getScheduler().scheduleDelayedRepeatingTask(this, new ScoreboardUpdater(), config.getInt("update"), config.getInt("update"), config.getBoolean("async", true));
         } else {
-            getLogger().notice("Scoreboard updating is not enabled");
+            getLogger().notice("Scoreboard updating is not enabled (update <= 0)");
         }
     }
 
-    @EventHandler
-    public void onJoin(PlayerLocallyInitializedEvent e) {
-        Player p = e.getPlayer();
-        if (!noScoreboardWorlds.contains(p.getLevel().getName())) {
-            Scoreboard scoreboard = ScoreboardAPI.createScoreboard();
-            ScoreboardDisplay scoreboardDisplay = scoreboard.addDisplay(DisplaySlot.SIDEBAR, "dumy", config.getString("title"));
-            config.getStringList("text").forEach((text) -> scoreboardDisplay.addLine(getScoreboardString(p, text), line++));
-            scoreboard.showFor(p);
-            scoreboards.put(p, scoreboard);
-            line = 0;
-        }
-    }
-
-    @EventHandler
-    private void onQuit(PlayerQuitEvent e) {
-        scoreboards.remove(e.getPlayer());
-    }
-    
     static String getScoreboardString(Player p, String text) {
-        return PlaceholderAPI.getInstance().translateString(getKDRStats(p, text)
-                    .replace("%economy_money%", getMoney(p))
-                    .replace("%factions_name%", getFaction(p)), p);
-    }
-
-    private static String getMoney(Player p) {
         try {
-            Class.forName("me.onebone.economyapi.EconomyAPI");
-            return String.format("%.2f", me.onebone.economyapi.EconomyAPI.getInstance().myMoney(p));
-        } catch (Exception ex) {
-            return "EconomyAPI plugin not found";
-        }
-    }
-
-    private static String getFaction(Player p) {
-        try {
-            Class.forName("com.massivecraft.factions.P");
-            return com.massivecraft.factions.P.p.getPlayerFactionTag(p);
+            return (String) placeholderAPI.getDeclaredMethod("translateString", String.class, Player.class).invoke(PlaceholderAPI.getInstance(), getKDRStats(p, text), p);
         } catch (Exception e) {
-            return "Factions plugin not found";
+            e.printStackTrace();
+            return "PlaceholderAPI error!";
         }
     }
-    
+
     private static String getKDRStats(Player p, String textToReplace) {
         try {
             Class.forName("kdr.Main");

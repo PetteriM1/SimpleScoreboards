@@ -7,6 +7,4 @@ main: me.petterim1.scoreboards.Main
 softdepend:
   - ScoreboardPlugin
   - PlaceholderAPI
-  - EconomyAPI
-  - Factions
   - KDR

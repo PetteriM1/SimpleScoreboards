@@ -6,8 +6,8 @@ version: 3
 # With coordinates 10-20 recommended, with other placeholders 80-200
 update: 0
 
-# Use async task to update scoreboard
-# Less server load but may lead to errors
+# Use async task to update the scoreboard
+# Less server load but may lead to random errors
 async: true
 
 # Scoreboard title
@@ -16,7 +16,7 @@ title: "§eSimple§9Scoreboards"
 # Scoreboard lines
 # You can use § for colors and placeholders from PlaceholderAPI
 text:
-  - "§dVersion §52.4.0"
+  - "§dVersion §5${pom.version}"
   - "§aCreated by §3PetteriM1"
   - "§6Setup your scoreboard in the config"
 
