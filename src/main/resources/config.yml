@@ -3,11 +3,10 @@ version: 3
 
 # How often scoreboard should be updated in ticks (20 ticks = 1 second)
 # 0 = disabled, ENABLE THIS IF YOU USE PLACEHOLDERS
-# With coordinates 10-20 recommended, with other placeholders 80-200
 update: 0
 
 # Use async task to update the scoreboard
-# Less server load but may lead to random errors
+# Less server load but may cause random errors
 async: true
 
 # Scoreboard title

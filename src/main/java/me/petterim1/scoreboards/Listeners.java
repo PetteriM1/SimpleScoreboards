@@ -13,16 +13,16 @@ import de.theamychan.scoreboard.network.ScoreboardDisplay;
 
 public class Listeners implements Listener {
 
-    private int line;
-
     @EventHandler
     public void onJoin(PlayerLocallyInitializedEvent e) {
         Player p = e.getPlayer();
         if (!Main.noScoreboardWorlds.contains(p.getLevel().getName())) {
             Scoreboard scoreboard = ScoreboardAPI.createScoreboard();
             ScoreboardDisplay scoreboardDisplay = scoreboard.addDisplay(DisplaySlot.SIDEBAR, "dumy", Main.scoreboardTitle);
-            Main.scoreboardText.forEach((text) -> scoreboardDisplay.addLine(Main.getScoreboardString(p, text), line++));
-            line = 0;
+            int line = 0;
+            for (String text : Main.scoreboardText) {
+                scoreboardDisplay.addLine(Main.getScoreboardString(p, text), line++);
+            }
             scoreboard.showFor(p);
             Main.scoreboards.put(p, scoreboard);
         }
@@ -33,9 +33,9 @@ public class Listeners implements Listener {
         if (e.getEntity() instanceof Player && !e.getOrigin().equals(e.getTarget())) {
             if (Main.noScoreboardWorlds.contains(e.getTarget().getName())) {
                 Player p = (Player) e.getEntity();
-                try {
-                    Main.scoreboards.get(p).hideFor(p);
-                } catch (Exception ignored) {
+                Scoreboard previous =  Main.scoreboards.get(p);
+                if (previous != null) {
+                    previous.hideFor(p);
                 }
                 Main.scoreboards.remove(p);
             }

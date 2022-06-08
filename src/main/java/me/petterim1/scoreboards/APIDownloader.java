@@ -22,8 +22,7 @@ public class APIDownloader {
                 fos.getChannel().transferFrom(Channels.newChannel(new URL("https://dl.dropboxusercontent.com/s/hsrflmdxqqrvc0v/ScoreboardAPI.jar").openStream()), 0, Long.MAX_VALUE);
                 fos.close();
             } catch (Exception e) {
-                plugin.getLogger().info("Failed to download ScoreboardAPI!");
-                server.getLogger().logException(e);
+                plugin.getLogger().error("Failed to download ScoreboardAPI!", e);
                 server.getPluginManager().disablePlugin(plugin);
                 return;
             }
@@ -42,8 +41,7 @@ public class APIDownloader {
                 fos.getChannel().transferFrom(Channels.newChannel(new URL("https://dl.dropboxusercontent.com/s/6rmogms1458p369/KotlinLib.jar").openStream()), 0, Long.MAX_VALUE);
                 fos.close();
             } catch (Exception e) {
-                plugin.getLogger().info("Failed to download KotlinLib!");
-                server.getLogger().logException(e);
+                plugin.getLogger().error("Failed to download KotlinLib!", e);
                 server.getPluginManager().disablePlugin(plugin);
                 return;
             }
@@ -62,8 +60,7 @@ public class APIDownloader {
                 fos.getChannel().transferFrom(Channels.newChannel(new URL("https://dl.dropboxusercontent.com/s/b5qvtaugosf54am/PlaceholderAPI.jar").openStream()), 0, Long.MAX_VALUE);
                 fos.close();
             } catch (Exception e) {
-                plugin.getLogger().info("Failed to download PlaceholderAPI!");
-                server.getLogger().logException(e);
+                plugin.getLogger().error("Failed to download PlaceholderAPI!", e);
                 server.getPluginManager().disablePlugin(plugin);
                 return;
             }
