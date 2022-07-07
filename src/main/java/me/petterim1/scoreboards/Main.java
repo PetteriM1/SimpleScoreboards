@@ -10,6 +10,7 @@ import com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI;
 
 import de.theamychan.scoreboard.network.Scoreboard;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,7 +25,7 @@ public class Main extends PluginBase implements Listener {
 
     static String scoreboardTitle;
     static List<String>  scoreboardText;
-    static List<String> noScoreboardWorlds;
+    public static final List<String> noScoreboardWorlds = new ArrayList<>();
 
     static final Map<Player, Scoreboard> scoreboards = new ConcurrentHashMap<>();
 
@@ -49,7 +50,7 @@ public class Main extends PluginBase implements Listener {
 
         scoreboardTitle = config.getString("title");
         scoreboardText = config.getStringList("text");
-        noScoreboardWorlds = config.getStringList("noScoreboardWorlds");
+        noScoreboardWorlds.addAll(config.getStringList("noScoreboardWorlds"));
 
         try {
             if (Integer.parseInt(System.getProperty("java.version").split("\\.")[0]) > 11) {
