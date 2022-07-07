@@ -73,6 +73,10 @@ public class Main extends PluginBase implements Listener {
         }
     }
 
+    public void refreshPlayerDisplay(Player player) {
+        scoreboards.remove(player);
+    }
+
     static String getScoreboardString(Player p, String text) {
         try {
             return (String) placeholderAPI.getDeclaredMethod("translateString", String.class, Player.class).invoke(PlaceholderAPI.getInstance(), getKDRStats(p, text), p);
