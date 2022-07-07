@@ -42,6 +42,10 @@ public class ScoreboardUpdater implements Runnable {
             if (!players.isEmpty()) {
                 for (Player p : players.values()) {
                     if (!p.spawned || Main.noScoreboardWorlds.contains(p.getLevel().getName())) {
+                        Scoreboard previous = Main.scoreboards.remove(p);
+                        if (previous != null) {
+                            previous.hideFor(p);
+                        }
                         continue;
                     }
 
