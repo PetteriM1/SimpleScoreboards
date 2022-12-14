@@ -38,7 +38,7 @@ public class APIDownloader {
 
             try {
                 FileOutputStream fos = new FileOutputStream(placeholderApi);
-                fos.getChannel().transferFrom(Channels.newChannel(new URL("https://dl.dropboxusercontent.com/s/6rmogms1458p369/KotlinLib.jar").openStream()), 0, Long.MAX_VALUE);
+                fos.getChannel().transferFrom(Channels.newChannel(new URL("https://cloudburstmc.org/resources/kotlinlib.48/version/2442/download").openStream()), 0, Long.MAX_VALUE);
                 fos.close();
             } catch (Exception e) {
                 plugin.getLogger().error("Failed to download KotlinLib!", e);
@@ -57,7 +57,7 @@ public class APIDownloader {
 
             try {
                 FileOutputStream fos = new FileOutputStream(placeholderApi);
-                fos.getChannel().transferFrom(Channels.newChannel(new URL("https://dl.dropboxusercontent.com/s/b5qvtaugosf54am/PlaceholderAPI.jar").openStream()), 0, Long.MAX_VALUE);
+                fos.getChannel().transferFrom(Channels.newChannel(new URL("https://cloudburstmc.org/resources/placeholderapi.104/version/1830/download").openStream()), 0, Long.MAX_VALUE);
                 fos.close();
             } catch (Exception e) {
                 plugin.getLogger().error("Failed to download PlaceholderAPI!", e);
