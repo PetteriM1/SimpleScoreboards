@@ -9,7 +9,7 @@ import java.nio.channels.Channels;
 
 public class APIDownloader {
 
-    static void checkAndRun(Plugin plugin) {
+    static boolean checkAndRun(Plugin plugin) {
         Server server = plugin.getServer();
 
         if (server.getPluginManager().getPlugin("ScoreboardPlugin") == null) {
@@ -23,8 +23,7 @@ public class APIDownloader {
                 fos.close();
             } catch (Exception e) {
                 plugin.getLogger().error("Failed to download ScoreboardAPI!", e);
-                server.getPluginManager().disablePlugin(plugin);
-                return;
+                return false;
             }
 
             plugin.getLogger().info("ScoreboardAPI downloaded successfully");
@@ -42,8 +41,7 @@ public class APIDownloader {
                 fos.close();
             } catch (Exception e) {
                 plugin.getLogger().error("Failed to download KotlinLib!", e);
-                server.getPluginManager().disablePlugin(plugin);
-                return;
+                return false;
             }
 
             plugin.getLogger().info("PlaceholderAPI downloaded successfully");
@@ -61,12 +59,13 @@ public class APIDownloader {
                 fos.close();
             } catch (Exception e) {
                 plugin.getLogger().error("Failed to download PlaceholderAPI!", e);
-                server.getPluginManager().disablePlugin(plugin);
-                return;
+                return false;
             }
 
             plugin.getLogger().info("PlaceholderAPI downloaded successfully");
             server.getPluginManager().loadPlugin(placeholderApi);
         }
+
+        return true;
     }
 }

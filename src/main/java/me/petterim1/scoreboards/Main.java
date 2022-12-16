@@ -23,23 +23,20 @@ public class Main extends PluginBase implements Listener {
 
     static boolean incompatibleJava;
 
-    static String scoreboardTitle;
-    static List<String>  scoreboardText;
+    public static String scoreboardTitle;
+    public static final List<String> scoreboardText = new ArrayList<>();
     public static final List<String> noScoreboardWorlds = new ArrayList<>();
 
     static final Map<Player, Scoreboard> scoreboards = new ConcurrentHashMap<>();
 
     @Override
     public void onEnable() {
-        APIDownloader.checkAndRun(this);
-
-        try {
-            placeholderApi = PlaceholderAPI.getInstance();
-        } catch (Exception e) {
-            getLogger().critical("Error with PlaceholderAPI" , e);
+        if (!APIDownloader.checkAndRun(this)) {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
+        placeholderApi = PlaceholderAPI.getInstance();
 
         saveDefaultConfig();
         Config config = getConfig();
@@ -49,7 +46,7 @@ public class Main extends PluginBase implements Listener {
         }
 
         scoreboardTitle = config.getString("title");
-        scoreboardText = config.getStringList("text");
+        scoreboardText.addAll(config.getStringList("text"));
         noScoreboardWorlds.addAll(config.getStringList("noScoreboardWorlds"));
 
         try {
@@ -75,16 +72,15 @@ public class Main extends PluginBase implements Listener {
 
     static String getScoreboardString(Player p, String text) {
         try {
-            String t = placeholderApi.translateString(getKDRStats(p, text), p);
-            text = placeholderApi.translateString(t, p);
-            return text;
+            String t = placeholderApi.translateString(getKDRStatsReplaced(p, text), p);
+            return placeholderApi.translateString(t, p);
         } catch (Exception e) {
             e.printStackTrace();
             return "PlaceholderAPI error!";
         }
     }
 
-    private static String getKDRStats(Player p, String textToReplace) {
+    private static String getKDRStatsReplaced(Player p, String textToReplace) {
         try {
             Class.forName("kdr.Main");
 
