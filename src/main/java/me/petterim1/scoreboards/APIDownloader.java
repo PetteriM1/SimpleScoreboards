@@ -27,7 +27,7 @@ public class APIDownloader {
             }
 
             plugin.getLogger().info("ScoreboardAPI downloaded successfully");
-            server.getPluginManager().loadPlugin(scoreboardApi);
+            server.getPluginManager().enablePlugin(server.getPluginManager().loadPlugin(scoreboardApi));
         }
 
         if (server.getPluginManager().getPlugin("KotlinLib") == null) {
@@ -45,7 +45,7 @@ public class APIDownloader {
             }
 
             plugin.getLogger().info("PlaceholderAPI downloaded successfully");
-            server.getPluginManager().loadPlugin(placeholderApi);
+            server.getPluginManager().enablePlugin(server.getPluginManager().loadPlugin(placeholderApi));
         }
 
         if (server.getPluginManager().getPlugin("PlaceholderAPI") == null) {
@@ -63,7 +63,7 @@ public class APIDownloader {
             }
 
             plugin.getLogger().info("PlaceholderAPI downloaded successfully");
-            server.getPluginManager().loadPlugin(placeholderApi);
+            server.getPluginManager().enablePlugin(server.getPluginManager().loadPlugin(placeholderApi));
         }
 
         return true;
