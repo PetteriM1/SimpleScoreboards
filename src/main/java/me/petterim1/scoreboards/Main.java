@@ -19,7 +19,7 @@ public class Main extends PluginBase implements Listener {
 
     private static final int currentConfig = 3;
 
-    private static Class<?> placeholderAPI;
+    static PlaceholderAPI placeholderApi;
 
     static boolean incompatibleJava;
 
@@ -34,7 +34,7 @@ public class Main extends PluginBase implements Listener {
         APIDownloader.checkAndRun(this);
 
         try {
-            placeholderAPI = Class.forName("com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI");
+            placeholderApi = PlaceholderAPI.getInstance();
         } catch (Exception e) {
             getLogger().critical("Error with PlaceholderAPI" , e);
             getServer().getPluginManager().disablePlugin(this);
@@ -75,7 +75,9 @@ public class Main extends PluginBase implements Listener {
 
     static String getScoreboardString(Player p, String text) {
         try {
-            return (String) placeholderAPI.getDeclaredMethod("translateString", String.class, Player.class).invoke(PlaceholderAPI.getInstance(), getKDRStats(p, text), p);
+            String t = placeholderApi.translateString(getKDRStats(p, text), p);
+            text = placeholderApi.translateString(t, p);
+            return text;
         } catch (Exception e) {
             e.printStackTrace();
             return "PlaceholderAPI error!";
