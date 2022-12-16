@@ -19,7 +19,7 @@ public class Main extends PluginBase implements Listener {
 
     private static final int currentConfig = 3;
 
-    static PlaceholderAPI placeholderApi = null;
+    static PlaceholderAPI placeholderApi;
 
     static boolean incompatibleJava;
 
