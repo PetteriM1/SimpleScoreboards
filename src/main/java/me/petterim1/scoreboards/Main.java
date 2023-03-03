@@ -19,8 +19,6 @@ public class Main extends PluginBase implements Listener {
 
     private static final int currentConfig = 3;
 
-    static PlaceholderAPI placeholderApi;
-
     static boolean incompatibleJava;
 
     public static String scoreboardTitle;
@@ -35,8 +33,6 @@ public class Main extends PluginBase implements Listener {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-
-        placeholderApi = PlaceholderAPI.getInstance();
 
         saveDefaultConfig();
         Config config = getConfig();
@@ -72,8 +68,7 @@ public class Main extends PluginBase implements Listener {
 
     static String getScoreboardString(Player p, String text) {
         try {
-            String t = placeholderApi.translateString(getKDRStatsReplaced(p, text), p);
-            return placeholderApi.translateString(t, p);
+            return PlaceholderAPI.getInstance().translateString(getKDRStatsReplaced(p, text), p);
         } catch (Exception e) {
             e.printStackTrace();
             return "PlaceholderAPI error!";
