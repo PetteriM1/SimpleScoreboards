@@ -7,7 +7,7 @@ update: 0
 
 # Use async task to update the scoreboard
 # Less server load but may cause random errors
-async: true
+async: false
 
 # Scoreboard title
 title: "§eSimple§9Scoreboards"
@@ -17,7 +17,7 @@ title: "§eSimple§9Scoreboards"
 text:
   - "§dVersion §5${pom.version}"
   - "§aCreated by §3PetteriM1"
-  - "§6Setup your scoreboard in the config"
+  - "§6Setup your scoreboard in config.yml"
 
 # List of worlds where the scoreboard should be disabled
 noScoreboardWorlds:
