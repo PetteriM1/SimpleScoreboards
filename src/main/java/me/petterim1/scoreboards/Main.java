@@ -1,29 +1,23 @@
 package me.petterim1.scoreboards;
 
-import cn.nukkit.Nukkit;
 import cn.nukkit.Player;
 import cn.nukkit.event.Listener;
 import cn.nukkit.plugin.PluginBase;
+import cn.nukkit.scoreboard.Scoreboard;
 import cn.nukkit.utils.Config;
 
 import com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI;
 
-import de.theamychan.scoreboard.network.Scoreboard;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Main extends PluginBase implements Listener {
 
     private static final int currentConfig = 3;
 
-    static boolean incompatibleJava;
-
     public static String scoreboardTitle;
     public static final List<String> scoreboardText = new ArrayList<>();
-    public static final List<String> noScoreboardWorlds = new ArrayList<>();
+    public static final Set<String> noScoreboardWorlds = new HashSet<>();
 
     static final Map<Player, Scoreboard> scoreboards = new ConcurrentHashMap<>();
 
@@ -45,22 +39,10 @@ public class Main extends PluginBase implements Listener {
         scoreboardText.addAll(config.getStringList("text"));
         noScoreboardWorlds.addAll(config.getStringList("noScoreboardWorlds"));
 
-        try {
-            if (Integer.parseInt(System.getProperty("java.version").split("\\.")[0]) > 11) {
-                getLogger().warning("The plugin cannot be guaranteed to work on this Java version. For best compatibility and performance, use Java 8 or 11.");
-                incompatibleJava = true;
-            }
-        } catch (Exception e) {
-            getLogger().warning("Failed to check Java version. For best compatibility and performance, use Java 8 or 11.");
-            if (Nukkit.DEBUG > 1) {
-                e.printStackTrace();
-            }
-        }
-
         getServer().getPluginManager().registerEvents(new Listeners(), this);
 
         if (config.getInt("update") > 0) {
-            getServer().getScheduler().scheduleDelayedRepeatingTask(this, new ScoreboardUpdater(this), config.getInt("update"), config.getInt("update"), config.getBoolean("async", true));
+            getServer().getScheduler().scheduleDelayedRepeatingTask(this, new ScoreboardUpdater(), config.getInt("update"), config.getInt("update"), config.getBoolean("async", true));
         } else {
             getLogger().notice("Scoreboard updating is not enabled (update <= 0)");
         }

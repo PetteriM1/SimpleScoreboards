@@ -12,24 +12,6 @@ public class APIDownloader {
     static boolean checkAndRun(Plugin plugin) {
         Server server = plugin.getServer();
 
-        if (server.getPluginManager().getPlugin("ScoreboardPlugin") == null) {
-            plugin.getLogger().info("Downloading ScoreboardAPI...");
-
-            String scoreboardApi = server.getFilePath() + "/plugins/ScoreboardAPI.jar";
-
-            try {
-                FileOutputStream fos = new FileOutputStream(scoreboardApi);
-                fos.getChannel().transferFrom(Channels.newChannel(new URL("https://dl.dropboxusercontent.com/s/hsrflmdxqqrvc0v/ScoreboardAPI.jar").openStream()), 0, Long.MAX_VALUE);
-                fos.close();
-            } catch (Exception e) {
-                plugin.getLogger().error("Failed to download ScoreboardAPI!", e);
-                return false;
-            }
-
-            plugin.getLogger().info("ScoreboardAPI downloaded successfully");
-            server.getPluginManager().enablePlugin(server.getPluginManager().loadPlugin(scoreboardApi));
-        }
-
         if (server.getPluginManager().getPlugin("KotlinLib") == null) {
             plugin.getLogger().info("Downloading KotlinLib...");
 
