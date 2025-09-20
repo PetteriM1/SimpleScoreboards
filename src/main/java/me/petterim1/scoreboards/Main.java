@@ -15,6 +15,7 @@ public class Main extends PluginBase implements Listener {
 
     private static final int currentConfig = 3;
 
+    private static boolean useKDR;
     public static String scoreboardTitle;
     public static final List<String> scoreboardText = new ArrayList<>();
     public static final Set<String> noScoreboardWorlds = new HashSet<>();
@@ -35,6 +36,8 @@ public class Main extends PluginBase implements Listener {
             getLogger().warning("The config file of SimpleScoreboards plugin is outdated. Please delete the old config.yml file.");
         }
 
+        useKDR = getServer().getPluginManager().getPlugin("KDR") != null;
+
         scoreboardTitle = config.getString("title");
         scoreboardText.addAll(config.getStringList("text"));
         noScoreboardWorlds.addAll(config.getStringList("noScoreboardWorlds"));
@@ -42,7 +45,7 @@ public class Main extends PluginBase implements Listener {
         getServer().getPluginManager().registerEvents(new Listeners(), this);
 
         if (config.getInt("update") > 0) {
-            getServer().getScheduler().scheduleDelayedRepeatingTask(this, new ScoreboardUpdater(), config.getInt("update"), config.getInt("update"), config.getBoolean("async", true));
+            getServer().getScheduler().scheduleDelayedRepeatingTask(this, new ScoreboardUpdater(), config.getInt("update"), config.getInt("update"));
         } else {
             getLogger().notice("Scoreboard updating is not enabled (update <= 0)");
         }
@@ -50,7 +53,7 @@ public class Main extends PluginBase implements Listener {
 
     static String getScoreboardString(Player p, String text) {
         try {
-            return PlaceholderAPI.getInstance().translateString(getKDRStatsReplaced(p, text), p);
+            return PlaceholderAPI.getInstance().translateString(useKDR ? getKDRStatsReplaced(p, text) : text, p);
         } catch (Exception e) {
             e.printStackTrace();
             return "PlaceholderAPI error!";

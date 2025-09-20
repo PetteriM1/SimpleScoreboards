@@ -5,10 +5,6 @@ version: 3
 # 0 = disabled, ENABLE THIS IF YOU USE PLACEHOLDERS
 update: 0
 
-# Use async task to update the scoreboard
-# Might be useful if your placeholders are slow but may cause random errors
-async: false
-
 # Scoreboard title
 title: "§l§eSimple§9Scoreboards"
 
