@@ -45,7 +45,7 @@ public class Main extends PluginBase implements Listener {
         getServer().getPluginManager().registerEvents(new Listeners(), this);
 
         if (config.getInt("update") > 0) {
-            getServer().getScheduler().scheduleDelayedRepeatingTask(this, new ScoreboardUpdater(), config.getInt("update"), config.getInt("update"));
+            getServer().getScheduler().scheduleDelayedRepeatingTask(this, new ScoreboardUpdater(), config.getInt("update"), config.getInt("update"), config.getBoolean("unsafe-async"));
         } else {
             getLogger().notice("Scoreboard updating is not enabled (update <= 0)");
         }
